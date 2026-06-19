@@ -1,0 +1,10 @@
+Flask
+Flask-CORS
+opencv-python-headless
+numpy
+requests
+python-dotenv
+gc
+json
+os
+logging
