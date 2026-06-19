@@ -29,7 +29,7 @@ def configure_logging():
 
     app_handler = RotatingFileHandler(
         "logs/app.log",
-        maxBytes=10 * 1024 * 1024,  # 10 MB
+        maxBytes=5 * 1024 * 1024,  # 5 MB
         backupCount=5
     )
 
@@ -37,7 +37,7 @@ def configure_logging():
 
     error_handler = RotatingFileHandler(
         "logs/error.log",
-        maxBytes=10 * 1024 * 1024,
+        maxBytes=5 * 1024 * 1024,
         backupCount=5
     )
 
