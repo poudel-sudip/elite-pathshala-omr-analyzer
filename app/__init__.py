@@ -44,12 +44,12 @@ def configure_logging():
     error_handler.setLevel(logging.ERROR)
     error_handler.setFormatter(formatter)
 
-    # console_handler = logging.StreamHandler()
-    # console_handler.setFormatter(formatter)
+    console_handler = logging.StreamHandler()
+    console_handler.setFormatter(formatter)
 
     root_logger.addHandler(app_handler)
     root_logger.addHandler(error_handler)
-    # root_logger.addHandler(console_handler)
+    root_logger.addHandler(console_handler)
 
 
 
