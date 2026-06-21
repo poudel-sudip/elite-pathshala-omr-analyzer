@@ -17,7 +17,7 @@ class Config:
 
     DEBUG = os.getenv("DEBUG", "False").lower() == "true"
     HOST = os.getenv("HOST", "0.0.0.0")
-    PORT = int(os.getenv("PORT", 5000))
+    PORT = int(os.getenv("PORT", 8000))
 
     # =====================================
     # External Services
