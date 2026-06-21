@@ -1,0 +1,6 @@
+steps to complete the procedures:
+
+1. template_generator.py
+2. align_mark_bubbles.py
+3. detect_student_questions.py
+4. main.py
