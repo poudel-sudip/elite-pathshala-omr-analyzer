@@ -41,6 +41,7 @@ def analyze_omr():
     Accepts:
     {
         "omr_sheet": "https://...",
+        "upload_url": "https://...",
         "correct_answers": {
             "1": "A",
             "2": "C"
@@ -53,6 +54,8 @@ def analyze_omr():
         payload = request.get_json(silent=True) or {}
 
         omr_sheet = payload.get("omr_sheet")
+
+        upload_url = payload.get("upload_url")
 
         correct_answers = payload.get("correct_answers")
 
@@ -119,7 +122,8 @@ def analyze_omr():
 
         result = analyzer.analyze(
             omr_sheet_url=omr_sheet,
-            correct_answers=correct_answers
+            correct_answers=correct_answers,
+            upload_url=upload_url
         )
 
         status_code = (200 if result.get("success") else 400)

@@ -27,7 +27,7 @@ class OMRAnalyzer:
         Return Result
     """
 
-    def analyze(self, omr_sheet_url: str, correct_answers: dict) -> dict:
+    def analyze(self, omr_sheet_url: str, correct_answers: dict, upload_url: str = None) -> dict:
 
         try:
 
@@ -68,23 +68,24 @@ class OMRAnalyzer:
 
             # logger.info("Detected %s answers", len(detected_answers))
 
-            # ----------------------------------------
-            # Create Evaluated Sheet
-            # ----------------------------------------
-
-            evaluated_sheet = update_omr_sheet(normalized_image, detected_answers, correct_answers)
+            
 
             # ----------------------------------------
             # Upload Evaluated Sheet
             # ----------------------------------------
 
             final_sheet_url = ""
+            if upload_url is not None and len(correct_answers):
+                # ----------------------------------------
+                # Create Evaluated Sheet
+                # ----------------------------------------
 
-            if evaluated_sheet is not None and len(correct_answers):
+                evaluated_sheet = update_omr_sheet(normalized_image, detected_answers, correct_answers)
 
-                final_sheet_url = upload_image(evaluated_sheet)
+                if evaluated_sheet is not None:
+                    final_sheet_url = upload_image(evaluated_sheet, upload_url)
 
-                # logger.info("Evaluated sheet uploaded")
+                    # logger.info("Evaluated sheet uploaded")
 
             # ----------------------------------------
             # Calculate Score

@@ -34,7 +34,8 @@ def test_local_omr():
     url = 'http://localhost:8000/api/analyze-omr'
     data = {
         'omr_sheet': 'https://dev-storage.elitepathshala.com/uploads/omr-exam/7/6jiMcv4LYG4muS2aReJAjkX4AQepYsQaae5x5xZc.jpg',
-        # 'correct_answers' : {'1':'A'}
+        'correct_answers' : {'1':'A'},
+        'upload_url': 'https://elitepathshala.com/api/upload-file'
     }
 
     try:

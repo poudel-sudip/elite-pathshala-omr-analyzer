@@ -63,7 +63,7 @@ def download_image(image_url: str):
         )
         raise
 
-def upload_image(image):
+def upload_image(image, upload_url = Config.FILE_UPLOAD_URL):
     """
     Upload OpenCV image and return uploaded URL.
     """
@@ -89,7 +89,7 @@ def upload_image(image):
         }
 
         response = requests.post(
-            Config.FILE_UPLOAD_URL,
+            upload_url,
             files=files,
             timeout=Config.IMAGE_UPLOAD_TIMEOUT
         )
