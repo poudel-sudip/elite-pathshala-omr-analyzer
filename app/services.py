@@ -67,6 +67,8 @@ def upload_image(image, upload_url = Config.FILE_UPLOAD_URL):
     """
     Upload OpenCV image and return uploaded URL.
     """
+    if not upload_url or not upload_url.strip():
+        return ""
 
     try:
 

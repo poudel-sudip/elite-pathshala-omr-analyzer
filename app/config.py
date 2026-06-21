@@ -25,7 +25,7 @@ class Config:
 
     FILE_UPLOAD_URL = os.getenv(
         "FILE_UPLOAD_URL",
-        "http://127.0.0.1:8000/api/upload-file"
+        None
     )
 
     IMAGE_DOWNLOAD_TIMEOUT = int(
