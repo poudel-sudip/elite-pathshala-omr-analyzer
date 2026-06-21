@@ -1,10 +1,7 @@
-Flask
-Flask-CORS
-opencv-python-headless
-numpy
-requests
-python-dotenv
-gc
-json
-os
-logging
+Flask==3.1.1
+Flask-CORS==6.0.1
+opencv-python-headless==4.12.0.88
+numpy==2.2.6
+requests==2.32.4
+python-dotenv==1.1.1
+gunicorn==23.0.0
