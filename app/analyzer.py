@@ -91,23 +91,22 @@ class OMRAnalyzer:
             # Calculate Score
             # ----------------------------------------
 
-            # total_questions = len(correct_answers)
+            total_questions = len(correct_answers)
+            attempted = 0
+            correct = 0
+            incorrect = 0
 
-            # attempted = 0
-            # correct = 0
-            # incorrect = 0
+            for question_no, answer in (detected_answers.items()):
 
-            # for question_no, answer in (detected_answers.items()):
+                if not answer:
+                    continue
 
-            #     if not answer:
-            #         continue
+                attempted += 1
 
-            #     attempted += 1
-
-            #     if (answer == correct_answers.get(question_no)):
-            #         correct += 1
-            #     else:
-            #         incorrect += 1
+                if (answer == correct_answers.get(question_no)):
+                    correct += 1
+                else:
+                    incorrect += 1
 
             # score_percentage = 0.0
 
@@ -125,13 +124,13 @@ class OMRAnalyzer:
                     "student_id": student_id,
                     "answers": detected_answers,
                     "final_sheet": final_sheet_url,
-                    # "summary": {
-                    #     "total_questions": total_questions,
-                    #     "attempted": attempted,
-                    #     "correct": correct,
-                    #     "incorrect": incorrect,
-                    #     "score_percentage": score_percentage
-                    # }
+                    "summary": {
+                        "total_questions": total_questions,
+                        "attempted": attempted,
+                        "correct": correct,
+                        "incorrect": incorrect,
+                        # "score_percentage": score_percentage
+                    }
                 }
             }
 
