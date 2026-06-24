@@ -83,17 +83,17 @@ class Config:
     # Bubble Detection
     # =====================================
 
-    BUBBLE_RADIUS = 14
+    BUBBLE_RADIUS = 16
 
     CONTRAST_THRESHOLD_PERCENT = 0.20
 
     DISTINCTNESS_RATIO = 1.8
 
-    MIN_FILLED_PIXEL_COUNT = 120
+    MIN_FILLED_PIXEL_COUNT = 200
 
-    SOLID_FILL_PERCENT = 0.60
+    SOLID_FILL_PERCENT = 0.85
 
-    MULTI_MARK_RATIO = 0.75
+    MULTI_MARK_RATIO = 0.40
 
     # =====================================
     # Student ID Detection
