@@ -93,7 +93,12 @@ class Config:
 
     SOLID_FILL_PERCENT = 0.80
 
-    MULTI_MARK_RATIO = 0.45
+    ATTEMPTED_MIN_PIXELS = 1300
+
+    MULTI_MARK_MIN_PIXELS = 700
+
+    MULTI_MARK_RATIO = 0.70
+
 
     # =====================================
     # Student ID Detection

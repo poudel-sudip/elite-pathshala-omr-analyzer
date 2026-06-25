@@ -147,7 +147,7 @@ def locate_page_corner_markers(img):
         "br": {"x": int(br[0]), "y": int(br[1])},
         "bl": {"x": int(bl[0]), "y": int(bl[1])},
     }
-    
+
 
 def _count_dark_pixels(thresh,x,y):
     """
@@ -276,8 +276,6 @@ def detect_question_answers(img):
 
     answers = {}
 
-    total_box_area = (Config.BUBBLE_RADIUS * 2) ** 2
-
     for question in range(Config.TOTAL_QUESTIONS):
 
         q_key = str(question + 1)
@@ -302,39 +300,21 @@ def detect_question_answers(img):
             reverse=True
         )
 
-        best_option = sorted_options[0][0]
-        best_pixels = sorted_options[0][1]
+        best_option, best_pixels = sorted_options[0]
+        second_pixels = sorted_options[1][1]
 
-        min_pixels = min(pixel_counts.values())
+        ratio = second_pixels / best_pixels
 
-        avg_baseline = (sum(pixel_counts.values()) - best_pixels) / 3
+        if best_pixels < Config.ATTEMPTED_MIN_PIXELS:
+            answers[q_key] = ""  # NOT_ATTEMPTED
+            continue
 
-        has_high_contrast = (best_pixels - min_pixels) > (total_box_area * Config.CONTRAST_THRESHOLD_PERCENT)
+        if (second_pixels >= Config.MULTI_MARK_MIN_PIXELS and ratio >= Config.MULTI_MARK_RATIO):
+            answers[q_key] = best_option+"M"  # MULTI_MARKED
+            continue
 
-        is_distinct = (best_pixels > avg_baseline * Config.DISTINCTNESS_RATIO and best_pixels > Config.MIN_FILLED_PIXEL_COUNT)
-
-        is_solid_fill = (best_pixels > total_box_area * Config.SOLID_FILL_PERCENT)
-
-        multi_marked = False
-
-        for option, count in pixel_counts.items():
-
-            if option == best_option:
-                continue
-
-            if (count > best_pixels * Config.MULTI_MARK_RATIO):
-                multi_marked = True
-                break
-
-        if multi_marked:
-            answers[q_key] = ""
-
-        elif ((has_high_contrast and is_distinct) or is_solid_fill):
-            answers[q_key] = best_option
-
-        else:
-            answers[q_key] = ""
-
+        answers[q_key] = best_option  # ATTEMPTED
+        
     return answers
 
 
@@ -360,7 +340,8 @@ def update_omr_sheet(img,user_answers,correct_answers = {}):
             is_correct = (user_answer == correct_answer)
             for option, point in options.items():
 
-                if option != user_answer:
+                # if option != user_answer:
+                if option != (user_answer[0] if user_answer else ""):
                     continue
 
                 color = (Config.GREEN_COLOR if is_correct else Config.RED_COLOR)
