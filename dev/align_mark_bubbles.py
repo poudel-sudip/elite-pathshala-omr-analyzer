@@ -10,7 +10,7 @@ def normalize_image(img):
     template_corners = {}
     page_corners = locate_page_corner_markers(img)
 
-    with open("template_corner_markers.json") as f:
+    with open("static/template_corner_markers.json") as f:
         template_corners = json.load(f)
 
     src = np.array(
@@ -91,13 +91,13 @@ def generate_merged_debug_image(vis_img):
     student_id_bubbles = {}
     questions_bubbles = {}
 
-    with open("template_corner_markers.json") as f:
+    with open("static/template_corner_markers.json") as f:
         page_corners = json.load(f)
     
-    with open("template_student_id_bubbles.json") as f:
+    with open("static/template_student_id_bubbles.json") as f:
         student_id_bubbles = json.load(f)
     
-    with open("template_question_bubbles.json") as f:
+    with open("static/template_question_bubbles.json") as f:
         questions_bubbles = json.load(f)
 
 
@@ -137,7 +137,7 @@ def generate_merged_debug_image(vis_img):
 
 # Run detection on your sample file
 try:
-    image_path = "samples-1/CCI_000059.jpg.jpeg"
+    image_path = "sample-2.jpg"
     img = cv2.imread(image_path)
     if img is None:
         raise FileNotFoundError(f"Could not open or find the image for debugging: {image_path}")
