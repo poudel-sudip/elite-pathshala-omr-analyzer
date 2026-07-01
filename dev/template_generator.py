@@ -292,10 +292,71 @@ def locate_questions_bubbles(image_path, debug=False):
                 cv2.imwrite("template_question_bubbles.jpg",img)
 
     return coords
-    
+
+def locate_set_key_bubbles(image_path, debug=False):
+         
+    BLOCK_COORDS = {
+        "A" : np.array([1840, 2137]),
+        "B" : np.array([1931, 2137]),
+        "C" : np.array([2026, 2137]),
+        "D" : np.array([2127, 2137])
+    }
+
+    coords = {}
+    for col, option in enumerate(["A","B","C","D"]):
+        p = BLOCK_COORDS[str(option)]
+        cx = int(round(p[0]))
+        cy = int(round(p[1]))
+
+        coords[str(option)] = {
+            "x": cx,
+            "y": cy
+        }
+
+    with open("template_set_key_bubbles.json", "w") as f:
+        json.dump(coords, f, indent=4)
+   
+
+    if debug:
+        img = cv2.imread(image_path)
+        if img is None:
+            raise FileNotFoundError(f"Could not open or find the image: {image_path}")
+        
+        with open("template_set_key_bubbles.json") as f:
+            coords = json.load(f)
+        
+        for opt, pt in coords.items():
+            cv2.circle(img,
+                (
+                    pt["x"],
+                    pt["y"]
+                ),
+                8,
+                (255,0,0),
+                -1
+            )
+
+            cv2.putText(img,
+                f"{opt}",
+                (
+                    pt["x"]-10,
+                    pt["y"]-10
+                ),
+                cv2.FONT_HERSHEY_SIMPLEX,
+                0.35,
+                (0,0,255),
+                1
+            )
+
+            cv2.imwrite("template_set_key_bubbles.jpg",img)
+
+    return coords
+ 
+
 def generate_merged_debug_image(image_path):
     page_corners = {}
     student_id_bubbles = {}
+    set_bubbles = {}
     questions_bubbles = {}
 
     with open("template_corner_markers.json") as f:
@@ -304,6 +365,9 @@ def generate_merged_debug_image(image_path):
     with open("template_student_id_bubbles.json") as f:
         student_id_bubbles = json.load(f)
     
+    with open("template_set_key_bubbles.json") as f:
+        set_bubbles = json.load(f)
+        
     with open("template_question_bubbles.json") as f:
         questions_bubbles = json.load(f)
 
@@ -328,14 +392,20 @@ def generate_merged_debug_image(image_path):
     for key, pt in student_id_bubbles.items():
         cv2.circle(vis_img, (pt["x"], pt["y"]), 8, (255, 0, 0), -1)
 
-    # 4. Draw Question Bubbles (Blue dots with red labels)
+    # 4. Draw Set Key Bubbles (Blue dots with red labels)
+    for key, pt in set_bubbles.items():
+        cv2.circle(vis_img, (pt["x"], pt["y"]), 8, (255, 0, 0), -1)
+        cv2.putText(vis_img, f"{key}", (pt["x"] - 10, pt["y"] - 10),
+            cv2.FONT_HERSHEY_SIMPLEX, 0.35, (0, 0, 255), 1)
+
+    # 5. Draw Question Bubbles (Blue dots with red labels)
     for q, options in questions_bubbles.items():
         for opt, pt in options.items():
             cv2.circle(vis_img, (pt["x"], pt["y"]), 8, (255, 0, 0), -1)
             cv2.putText(vis_img, f"{q}{opt}", (pt["x"] - 10, pt["y"] - 10),
-                        cv2.FONT_HERSHEY_SIMPLEX, 0.35, (0, 0, 255), 1)
+                cv2.FONT_HERSHEY_SIMPLEX, 0.35, (0, 0, 255), 1)
 
-    # 5. Save the combined master view
+    # 6. Save the combined master view
     cv2.imwrite("template_marked_image.jpg", vis_img)
     
     return
@@ -346,6 +416,7 @@ try:
     image_file = "template.jpg"
     # page_corners = locate_page_corner_markers(image_file, False)
     # student_id_bubbles = locate_student_id_bubbles(image_file, False)
+    # set_key_bubbles = locate_set_key_bubbles(image_file, False)
     # questions_bubbles = locate_questions_bubbles(image_file, False)
 
     merged_image = generate_merged_debug_image(image_file)
