@@ -256,6 +256,7 @@ def detect_student_id(img):
         )
     )
 
+
 def detect_set_key(img):
     """
     Detect question set key.
@@ -295,7 +296,8 @@ def detect_set_key(img):
     best_option, best_pixels = sorted_options[0]
     second_pixels = sorted_options[1][1]
 
-    ratio = second_pixels / best_pixels
+    ratio = second_pixels / best_pixels if best_pixels else 0
+    
 
     set_key = best_option  # ATTEMPTED
 
@@ -354,7 +356,7 @@ def detect_question_answers(img):
         best_option, best_pixels = sorted_options[0]
         second_pixels = sorted_options[1][1]
 
-        ratio = second_pixels / best_pixels
+        ratio = second_pixels / best_pixels if best_pixels else 0
 
         if best_pixels < Config.ATTEMPTED_MIN_PIXELS:
             answers[q_key] = ""  # NOT_ATTEMPTED
