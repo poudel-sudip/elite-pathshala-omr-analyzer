@@ -66,6 +66,11 @@ class Config:
         "template_question_bubbles.json"
     )
 
+    TEMPLATE_SET_KEY_BUBBLES = os.path.join(
+        STATIC_DIR,
+        "template_set_key_bubbles.json"
+    )
+
     # =====================================
     # OMR General Settings
     # =====================================

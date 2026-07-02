@@ -256,6 +256,57 @@ def detect_student_id(img):
         )
     )
 
+def detect_set_key(img):
+    """
+    Detect question set key.
+    """
+
+    coords = templates.set_bubbles
+
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+    _, thresh = cv2.threshold(
+        gray,
+        0,
+        255,
+        cv2.THRESH_BINARY_INV
+        + cv2.THRESH_OTSU
+    )
+
+    set_key = ""
+    pixel_counts = {}
+
+    for option in Config.OPTIONS:
+        point = coords[option]
+        pixel_counts[option] = (
+            _count_dark_pixels(
+                thresh,
+                point["x"],
+                point["y"]
+            )
+        )
+
+    sorted_options = sorted(
+        pixel_counts.items(),
+        key=lambda item: item[1],
+        reverse=True
+    )
+
+    best_option, best_pixels = sorted_options[0]
+    second_pixels = sorted_options[1][1]
+
+    ratio = second_pixels / best_pixels
+
+    set_key = best_option  # ATTEMPTED
+
+    if (second_pixels >= Config.MULTI_MARK_MIN_PIXELS and ratio >= Config.MULTI_MARK_RATIO):
+        set_key = best_option+"M"  # MULTI_MARKED
+
+    if best_pixels < Config.ATTEMPTED_MIN_PIXELS:
+        set_key = ""  # NOT_ATTEMPTED
+
+    return set_key
+
 
 def detect_question_answers(img):
     """
@@ -318,7 +369,7 @@ def detect_question_answers(img):
     return answers
 
 
-def update_omr_sheet(img,user_answers,correct_answers = {}):
+def update_omr_sheet(img,user_answers,correct_answers = {}, user_set = None, correct_set = None):
     """
     Draw evaluation result on OMR image.
 
@@ -356,6 +407,25 @@ def update_omr_sheet(img,user_answers,correct_answers = {}):
                     color,
                     -1
                 )
+
+
+    if len(user_set) and len(correct_set):
+        coords = templates.set_bubbles
+        is_correct = (user_set == correct_set)
+        color = (Config.GREEN_COLOR if is_correct else Config.RED_COLOR)
+        point = coords.get(user_set)
+        if point:
+            cv2.circle(
+                output,
+                (
+                    point["x"],
+                    point["y"]
+                ),
+                Config.BUBBLE_RADIUS,
+                color,
+                -1
+            )
+
 
     return output
 

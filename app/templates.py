@@ -27,6 +27,10 @@ class TemplateManager:
             Config.TEMPLATE_QUESTION_BUBBLES
         )
 
+        self.set_bubbles = self._load_json(
+            Config.TEMPLATE_SET_KEY_BUBBLES
+        )
+
         # logger.info("OMR templates loaded successfully")
 
     @staticmethod
