@@ -414,10 +414,10 @@ def generate_merged_debug_image(image_path):
 # Run detection on your template file
 try:
     image_file = "template.jpg"
-    # page_corners = locate_page_corner_markers(image_file, False)
-    # student_id_bubbles = locate_student_id_bubbles(image_file, False)
-    # set_key_bubbles = locate_set_key_bubbles(image_file, False)
-    # questions_bubbles = locate_questions_bubbles(image_file, False)
+    page_corners = locate_page_corner_markers(image_file, False)
+    student_id_bubbles = locate_student_id_bubbles(image_file, False)
+    set_key_bubbles = locate_set_key_bubbles(image_file, False)
+    questions_bubbles = locate_questions_bubbles(image_file, False)
 
     merged_image = generate_merged_debug_image(image_file)
 
