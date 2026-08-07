@@ -65,7 +65,7 @@ def locate_page_corner_markers(image_path, debug=False):
 
         for idx, (x, y) in enumerate(sorted_corners):
             pt = (int(x), int(y))
-            cv2.circle(vis_img, pt, 25, colors[idx], -1)
+            cv2.circle(vis_img, pt, 8, colors[idx], -1)
             cv2.putText(vis_img, labels[idx], (pt[0] + 30, pt[1] + 10), 
                         cv2.FONT_HERSHEY_SIMPLEX, 1.2, colors[idx], 4)
             # print(f"{labels[idx]} Corner Found at Coordinate: X={pt[0]}, Y={pt[1]}")
@@ -79,18 +79,18 @@ def locate_student_id_bubbles(image_path, debug=False):
     COLS = 8
     ROWS = 10
 
-    TL = np.array([1620, 1490])
-    TR = np.array([2260, 1490])
+    TL = np.array([1607, 1442])
+    TR = np.array([2262, 1442])
 
-    BL = np.array([1620, 2015])
-    BR = np.array([2260, 2015])
+    BL = np.array([1607, 1981])
+    BR = np.array([2262, 1980])
 
     COL_CORRECTIONS = {
         0: 0,   
-        1: 0,   
-        2: -10,
-        3: -8,
-        4: -7,
+        1: -4,   
+        2: -11,
+        3: -9,
+        4: -8,
         5: -5,
         6: -5,
         7: 0 
@@ -99,13 +99,13 @@ def locate_student_id_bubbles(image_path, debug=False):
     ROW_CORRECTIONS = {
         0: 0,   
         1: 0,   
-        2: -2,
-        3: -5,
-        4: -5,
-        5: -8,
+        2: -4,
+        3: -7,
+        4: -7,
+        5: -7,
         6: -5,
-        7: -4,
-        8: -4,
+        7: -1,
+        8: -1,
         9: 0
     }
 
@@ -164,72 +164,73 @@ def locate_questions_bubbles(image_path, debug=False):
 
     BLOCK_CORNERS = {
         "1" : {
-            "TL" : np.array([202, 2263]),
-            "TR" : np.array([490, 2263]),
-            "BR" : np.array([485, 3204]),
-            "BL" : np.array([198, 3205])
+            "TL" : np.array([164, 2236]),
+            "TR" : np.array([450, 2236]),
+            "BR" : np.array([450, 3112]),
+            "BL" : np.array([164, 3112])
         },
         "2" : {
-            "TL" : np.array([660, 2265]),
-            "TR" : np.array([948, 2266]),
-            "BR" : np.array([945, 3207]),
-            "BL" : np.array([658, 3206])
+            "TL" : np.array([626, 2245]),
+            "TR" : np.array([913, 2245]),
+            "BR" : np.array([911, 3121]),
+            "BL" : np.array([624, 3121])
         },
         "3" : {
-            "TL" : np.array([1113, 2272]),
-            "TR" : np.array([1400, 2272]),
-            "BR" : np.array([1400, 3215]),
-            "BL" : np.array([1110, 3215])
+            "TL" : np.array([1086, 2237]),
+            "TR" : np.array([1372, 2237]),
+            "BR" : np.array([1370, 3113]),
+            "BL" : np.array([1084, 3113])
         },
         "4" : {
-            "TL" : np.array([1572, 2270]),
-            "TR" : np.array([1860, 2271]),
-            "BR" : np.array([1858, 3211]),
-            "BL" : np.array([1570, 3212])
+            "TL" : np.array([1552, 2240]),
+            "TR" : np.array([1838, 2240]),
+            "BR" : np.array([1835, 3115]),
+            "BL" : np.array([1550, 3115])
         },
         "5" : {
-            "TL" : np.array([2023, 2272]),
-            "TR" : np.array([2310, 2272]),
-            "BR" : np.array([2310, 3215]),
-            "BL" : np.array([2022, 3215])
+            "TL" : np.array([2017, 2237]),
+            "TR" : np.array([2300, 2239]),
+            "BR" : np.array([2300, 3114]),
+            "BL" : np.array([2015, 3113])
         },
     }
 
     COL_CORRECTIONS = {
-        1 : -5,
-        2 : -5
+        1 : 0,
+        2 : -2
     }
 
     ROW_CORRECTIONS = {
-        "1_3" : -10,
-        "1_6" : 2,
-        "1_7" : 5,
-        "1_8" : 7,
-        "2_2" : 1,
-        "2_3" : -4,
-        "2_4" : -8,
-        "2_6" : 5,
-        "2_7" : 9,
-        "2_8" : 10,
-        "3_1" : -6,
-        "3_2" : -2,
-        "3_3" : -8,
-        "3_4" : -10,
-        "3_6" : -5,
-        "3_8" : 3,
-        "4_1" : -4,
-        "4_2" : -4,
-        "4_3" : -10,
-        "4_4" : -8,
-        "4_5" : -2,
-        "4_7" : 4,
-        "4_8" : 1,
-        "5_1" : -3,
-        "5_3" : -6,
-        "5_4" : -13,
-        "5_5" : -2,
-        "5_6" : -5,
-        "5_8" : 5,
+        "1_1" : 1,
+        "1_3" : 3,
+        "1_4" : 5,
+        "1_5" : 5,
+        "1_6" : 3,
+        "1_7" : 2,
+        "2_1" : 1,
+        "2_3" : 3,
+        "2_4" : 5,
+        "2_5" : 5,
+        "2_6" : 3,
+        "2_7" : 2,
+        "3_1" : 1,
+        "3_3" : 3,
+        "3_4" : 5,
+        "3_5" : 5,
+        "3_6" : 3,
+        "3_7" : 2,
+        "4_1" : 1,
+        "4_3" : 3,
+        "4_4" : 5,
+        "4_5" : 5,
+        "4_6" : 3,
+        "4_7" : 2,
+        "5_1" : 1,
+        "5_3" : 3,
+        "5_4" : 5,
+        "5_5" : 5,
+        "5_6" : 3,
+        "5_7" : 2,
     }
     
     coords = {}
@@ -296,10 +297,10 @@ def locate_questions_bubbles(image_path, debug=False):
 def locate_set_key_bubbles(image_path, debug=False):
          
     BLOCK_COORDS = {
-        "A" : np.array([1840, 2137]),
-        "B" : np.array([1931, 2137]),
-        "C" : np.array([2026, 2137]),
-        "D" : np.array([2127, 2137])
+        "A" : np.array([1860, 2099]),
+        "B" : np.array([1952, 2099]),
+        "C" : np.array([2047, 2099]),
+        "D" : np.array([2150, 2099])
     }
 
     coords = {}
@@ -384,7 +385,7 @@ def generate_merged_debug_image(image_path):
     
     for idx, key in enumerate(sorted_keys):
         pt = (page_corners[key]["x"], page_corners[key]["y"])
-        cv2.circle(vis_img, pt, 25, colors[idx], -1)
+        cv2.circle(vis_img, pt, 18, colors[idx], -1)
         cv2.putText(vis_img, labels[idx], (pt[0] + 30, pt[1] + 10), 
                     cv2.FONT_HERSHEY_SIMPLEX, 1.2, colors[idx], 4)
 
@@ -413,7 +414,7 @@ def generate_merged_debug_image(image_path):
 
 # Run detection on your template file
 try:
-    image_file = "template.jpg"
+    image_file = "samples/9.jpg"
     page_corners = locate_page_corner_markers(image_file, False)
     student_id_bubbles = locate_student_id_bubbles(image_file, False)
     set_key_bubbles = locate_set_key_bubbles(image_file, False)

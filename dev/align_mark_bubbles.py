@@ -100,6 +100,8 @@ def generate_merged_debug_image(vis_img):
     with open("template_question_bubbles.json") as f:
         questions_bubbles = json.load(f)
 
+    with open("template_set_key_bubbles.json") as f:
+        set_bubbles = json.load(f)
 
     # 1. Read base image once
     # vis_img = cv2.imread(image_path)
@@ -128,7 +130,13 @@ def generate_merged_debug_image(vis_img):
             cv2.putText(vis_img, f"{q}{opt}", (pt["x"] - 10, pt["y"] - 10),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.35, (0, 0, 255), 1)
 
-    # 5. Save the combined master view
+    # 4. Draw Set Key Bubbles (Blue dots with red labels)
+    for key, pt in set_bubbles.items():
+        cv2.circle(vis_img, (pt["x"], pt["y"]), 8, (255, 0, 0), -1)
+        cv2.putText(vis_img, f"{key}", (pt["x"] - 10, pt["y"] - 10),
+            cv2.FONT_HERSHEY_SIMPLEX, 0.35, (0, 0, 255), 1)
+            
+    # 6. Save the combined master view
     # cv2.imwrite("template_marked_image.jpg", vis_img)
     
     return vis_img
@@ -137,7 +145,7 @@ def generate_merged_debug_image(vis_img):
 
 # Run detection on your sample file
 try:
-    image_path = "template.jpg"
+    image_path = "samples/12.jpg"
     img = cv2.imread(image_path)
     if img is None:
         raise FileNotFoundError(f"Could not open or find the image for debugging: {image_path}")
