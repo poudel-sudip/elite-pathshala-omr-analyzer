@@ -83,12 +83,12 @@ class OMRAnalyzer:
             final_sheet_url = ""
             if upload_url is not None:
                 evaluated_sheet = normalized_image
-                if len(correct_answers):
-                    evaluated_sheet = update_omr_sheet(evaluated_sheet, detected_answers, correct_answers, detected_set, correct_set)
-
                 if debug:
                     evaluated_sheet = debug_omr_sheet(evaluated_sheet)
 
+                if len(correct_answers):
+                    evaluated_sheet = update_omr_sheet(evaluated_sheet, detected_answers, correct_answers, detected_set, correct_set)
+                
                 if evaluated_sheet is not None:
                     final_sheet_url = upload_image(evaluated_sheet, upload_url)
 
