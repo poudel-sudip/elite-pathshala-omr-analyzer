@@ -431,3 +431,35 @@ def update_omr_sheet(img,user_answers,correct_answers = {}, user_set = None, cor
 
     return output
 
+
+def debug_omr_sheet(img):
+
+    ## debug corner markers points
+    coords = templates.corner_markers
+    for key, pt in coords.items():
+        cv2.circle(img, pt, Config.BUBBLE_RADIUS, (0, 125, 255), -1)
+        cv2.putText(img, f"{key.upper()}", (pt["x"] + 30, pt["y"] + 10), 
+            cv2.FONT_HERSHEY_SIMPLEX, 1.2, (0, 125, 255) ,4)
+
+
+    ## debug question set points
+    coords = templates.set_bubbles
+    for key, pt in coords.items():
+        cv2.circle(img, pt, Config.BUBBLE_RADIUS, (255, 0, 0), -1)
+        cv2.putText(img, f"{key.upper()}", (pt["x"] - 10, pt["y"] - 10), 
+            cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 125, 255), 1)
+
+    ## debug student id  bubble points
+    coords = templates.student_id_bubbles
+    for key, pt in coords.items():
+        cv2.circle(img, pt, Config.BUBBLE_RADIUS, (255, 0, 0), -1)
+
+    ## debug question bubble points
+    coords = templates.question_bubbles
+    for q, options in coords.items():
+        for opt, pt in options.items():
+            cv2.circle(img, pt, Config.BUBBLE_RADIUS, (255, 0, 0), -1)
+            cv2.putText(img, f"{q}{opt}", (pt["x"] - 10, pt["y"] - 10),
+                cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 125, 255), 1)
+       
+    return img;

@@ -2,7 +2,7 @@ import logging
 
 from app.config import Config
 from app.services import (download_image, upload_image)
-from app.detector import (normalize_image, detect_student_id, detect_question_answers, update_omr_sheet,detect_set_key)
+from app.detector import (normalize_image, detect_student_id, detect_question_answers, update_omr_sheet,detect_set_key, debug_omr_sheet)
 
 logger = logging.getLogger(__name__)
 
@@ -27,7 +27,7 @@ class OMRAnalyzer:
         Return Result
     """
 
-    def analyze(self, omr_sheet_url: str, correct_answers: dict, upload_url: str = None, correct_set: str = None) -> dict:
+    def analyze(self, omr_sheet_url: str, correct_answers: dict, upload_url: str = None, correct_set: str = None, debug: bool = False) -> dict:
 
         try:
 
@@ -81,17 +81,29 @@ class OMRAnalyzer:
             # ----------------------------------------
 
             final_sheet_url = ""
-            if upload_url is not None and len(correct_answers):
-                # ----------------------------------------
-                # Create Evaluated Sheet
-                # ----------------------------------------
+            if upload_url is not None:
+                evaluated_sheet = normalized_image
+                if len(correct_answers):
+                    evaluated_sheet = update_omr_sheet(evaluated_sheet, detected_answers, correct_answers, detected_set, correct_set)
 
-                evaluated_sheet = update_omr_sheet(normalized_image, detected_answers, correct_answers, detected_set, correct_set)
+                if debug:
+                    evaluated_sheet = debug_omr_sheet(evaluated_sheet)
 
                 if evaluated_sheet is not None:
                     final_sheet_url = upload_image(evaluated_sheet, upload_url)
 
-                    # logger.info("Evaluated sheet uploaded")
+
+            # if upload_url is not None and len(correct_answers):
+            #     # ----------------------------------------
+            #     # Create Evaluated Sheet
+            #     # ----------------------------------------
+
+            #     evaluated_sheet = update_omr_sheet(normalized_image, detected_answers, correct_answers, detected_set, correct_set)
+
+            #     if evaluated_sheet is not None:
+            #         final_sheet_url = upload_image(evaluated_sheet, upload_url)
+
+            #         # logger.info("Evaluated sheet uploaded")
 
             # ----------------------------------------
             # Calculate Score

@@ -46,7 +46,8 @@ def analyze_omr():
         "correct_answers": {
             "1": "A",
             "2": "C"
-        }
+        },
+        "debug": "debug|''",
     }
     """
 
@@ -61,6 +62,9 @@ def analyze_omr():
         correct_answers = payload.get("correct_answers")
 
         correct_set = payload.get("question_set")
+
+        # debug = payload.get("debug")
+        debug = str(payload.get("debug", "")).lower() == "debug"
 
         # ----------------------------------
         # Validate OMR Sheet
@@ -121,13 +125,20 @@ def analyze_omr():
                 }
             ), 400
 
+        # if debug and debug == 'debug':
+        #     debug = True
+        # else:
+        #     debug = False
+            
+        
         # logger.info("Received OMR analysis request")
 
         result = analyzer.analyze(
             omr_sheet_url=omr_sheet,
             correct_answers=correct_answers,
             upload_url=upload_url,
-            correct_set=correct_set
+            correct_set=correct_set,
+            debug=debug
         )
 
         status_code = (200 if result.get("success") else 400)
