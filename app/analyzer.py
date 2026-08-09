@@ -27,7 +27,7 @@ class OMRAnalyzer:
         Return Result
     """
 
-    def analyze(self, omr_sheet_url: str, correct_answers: dict, upload_url: str = None, correct_set: str = None, debug: bool = False) -> dict:
+    def analyze(self, omr_sheet_url: str, correct_answers: dict, upload_url: str = None, correct_set: str = None, debug = False) -> dict:
 
         try:
 

@@ -6,7 +6,7 @@ def test_health():
     """Test API health endpoint"""
     print("[*] Testing API health endpoint...\n")
 
-    url = 'http://localhost:8000/health'
+    url = 'http://localhost:7000/health'
 
     try:
         response = requests.get(url)
@@ -31,11 +31,13 @@ def test_local_omr():
     """Test OMR analysis with OMR sheet URL"""
     print("[*] Testing OMR analysis with sample image...\n")
 
-    url = 'http://localhost:8000/api/analyze-omr'
+    url = 'http://localhost:7000/api/analyze-omr'
     data = {
-        'omr_sheet': 'https://dev-storage.elitepathshala.com/uploads/omr-exam/7/6jiMcv4LYG4muS2aReJAjkX4AQepYsQaae5x5xZc.jpg',
+        'omr_sheet': 'https://dev-storage.elitepathshala.com/uploads/omr-exam/7/MauPFBzrg5khxUamZq6wa7zNYaAYGQ1AzYr3vnsp.jpg',
         'correct_answers' : {'1':'A'},
-        'upload_url': 'https://elitepathshala.com/api/upload-file'
+        'question_set' : 'A',
+        'upload_url': 'https://elitepathshala.com/api/upload-file',
+        'debug' : 'debug'
     }
 
     try:
