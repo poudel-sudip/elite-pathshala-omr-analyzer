@@ -86,66 +86,57 @@ def locate_page_corner_markers(img):
 
     return corner_coordinates
 
-def generate_merged_debug_image(vis_img):
-    page_corners = {}
-    student_id_bubbles = {}
-    questions_bubbles = {}
+def generate_merged_debug_image(img):
 
+    BUBBLE_RADIUS = 22
+
+    ## debug corner markers points
+    page_corners = {}
     with open("template_corner_markers.json") as f:
         page_corners = json.load(f)
-    
-    with open("template_student_id_bubbles.json") as f:
-        student_id_bubbles = json.load(f)
-    
-    with open("template_question_bubbles.json") as f:
-        questions_bubbles = json.load(f)
 
+    for key, pt in page_corners.items():
+        cv2.circle(img, (pt["x"], pt["y"]), BUBBLE_RADIUS, (0, 125, 255), -1)
+        cv2.putText(img, f"{key.upper()}", (pt["x"] + 30, pt["y"] + 10), 
+            cv2.FONT_HERSHEY_SIMPLEX, 1.2, (0, 125, 255) ,4)
+
+
+    ## debug question set points
+    set_bubbles = {}
     with open("template_set_key_bubbles.json") as f:
         set_bubbles = json.load(f)
 
-    # 1. Read base image once
-    # vis_img = cv2.imread(image_path)
-    # if vis_img is None:
-    #     raise FileNotFoundError(f"Could not open or find the image for debugging: {image_path}")
+    for key, pt in set_bubbles.items():
+        cv2.circle(img, (pt["x"], pt["y"]), BUBBLE_RADIUS, (255, 0, 0), -1)
+        cv2.putText(img, f"{key.upper()}", (pt["x"] - 10, pt["y"] - 10), 
+            cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 125, 255), 1)
 
-    # 2. Draw Page Corner Markers
-    labels = ["TL", "TR", "BR", "BL"]
-    colors = [(0, 0, 255), (0, 255, 0), (255, 0, 0), (0, 125, 255)] # BGR
-    sorted_keys = ["tl", "tr", "br", "bl"]
+
+    ## debug student id  bubble points
+    student_id_bubbles = {}
+    with open("template_student_id_bubbles.json") as f:
+        student_id_bubbles = json.load(f)
     
-    for idx, key in enumerate(sorted_keys):
-        pt = (page_corners[key]["x"], page_corners[key]["y"])
-        cv2.circle(vis_img, pt, 25, colors[idx], -1)
-        cv2.putText(vis_img, labels[idx], (pt[0] + 30, pt[1] + 10), 
-                    cv2.FONT_HERSHEY_SIMPLEX, 1.2, colors[idx], 4)
-
-    # 3. Draw Student ID Bubbles (Blue dots)
     for key, pt in student_id_bubbles.items():
-        cv2.circle(vis_img, (pt["x"], pt["y"]), 8, (255, 0, 0), -1)
+        cv2.circle(img, (pt["x"], pt["y"]), BUBBLE_RADIUS, (255, 0, 0), -1)
 
-    # 4. Draw Question Bubbles (Blue dots with red labels)
+    ## debug question bubble points
+    questions_bubbles = {}
+    with open("template_question_bubbles.json") as f:
+        questions_bubbles = json.load(f)
+
     for q, options in questions_bubbles.items():
         for opt, pt in options.items():
-            cv2.circle(vis_img, (pt["x"], pt["y"]), 8, (255, 0, 0), -1)
-            cv2.putText(vis_img, f"{q}{opt}", (pt["x"] - 10, pt["y"] - 10),
-                        cv2.FONT_HERSHEY_SIMPLEX, 0.35, (0, 0, 255), 1)
-
-    # 4. Draw Set Key Bubbles (Blue dots with red labels)
-    for key, pt in set_bubbles.items():
-        cv2.circle(vis_img, (pt["x"], pt["y"]), 8, (255, 0, 0), -1)
-        cv2.putText(vis_img, f"{key}", (pt["x"] - 10, pt["y"] - 10),
-            cv2.FONT_HERSHEY_SIMPLEX, 0.35, (0, 0, 255), 1)
-            
-    # 6. Save the combined master view
-    # cv2.imwrite("template_marked_image.jpg", vis_img)
-    
-    return vis_img
-
+            cv2.circle(img, (pt["x"], pt["y"]), BUBBLE_RADIUS, (255, 0, 0), -1)
+            cv2.putText(img, f"{q}{opt}", (pt["x"] - 10, pt["y"] - 10),
+                cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 125, 255), 1)
+       
+    return img;
 
 
 # Run detection on your sample file
 try:
-    image_path = "samples/12.jpg"
+    image_path = "samples/6.jpg"
     img = cv2.imread(image_path)
     if img is None:
         raise FileNotFoundError(f"Could not open or find the image for debugging: {image_path}")
