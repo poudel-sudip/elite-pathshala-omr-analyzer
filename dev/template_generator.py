@@ -70,20 +70,20 @@ def locate_student_id_bubbles(img, debug=False):
     COLS = 8
     ROWS = 10
 
-    TL = np.array([1607, 1442])
-    TR = np.array([2262, 1442])
+    TL = np.array([1598, 1450])
+    TR = np.array([2246, 1449])
 
-    BL = np.array([1607, 1981])
-    BR = np.array([2262, 1980])
+    BL = np.array([1599, 1995])
+    BR = np.array([2247, 1993])
 
     COL_CORRECTIONS = {
         0: 0,   
-        1: -4,   
-        2: -11,
-        3: -9,
-        4: -8,
+        1: -5,   
+        2: -13,
+        3: -10,
+        4: -10,
         5: -5,
-        6: -5,
+        6: -4,
         7: 0 
     }
 
@@ -93,10 +93,10 @@ def locate_student_id_bubbles(img, debug=False):
         2: -4,
         3: -7,
         4: -7,
-        5: -7,
-        6: -5,
-        7: -1,
-        8: -1,
+        5: -10,
+        6: -7,
+        7: -2,
+        8: -2,
         9: 0
     }
 
@@ -152,73 +152,43 @@ def locate_questions_bubbles(img, debug=False):
 
     BLOCK_CORNERS = {
         "1" : {
-            "TL" : np.array([164, 2236]),
-            "TR" : np.array([450, 2236]),
-            "BR" : np.array([450, 3112]),
-            "BL" : np.array([164, 3112])
+            "TL" : np.array([171, 2254]),
+            "TR" : np.array([453, 2254]),
+            "BR" : np.array([453, 3153]),
+            "BL" : np.array([171, 3153])
         },
         "2" : {
-            "TL" : np.array([626, 2245]),
-            "TR" : np.array([913, 2245]),
-            "BR" : np.array([911, 3121]),
-            "BL" : np.array([624, 3121])
+            "TL" : np.array([627, 2262]),
+            "TR" : np.array([908, 2261]),
+            "BR" : np.array([908, 3160]),
+            "BL" : np.array([627, 3161])
         },
         "3" : {
-            "TL" : np.array([1086, 2237]),
-            "TR" : np.array([1372, 2237]),
-            "BR" : np.array([1370, 3113]),
-            "BL" : np.array([1084, 3113])
+            "TL" : np.array([1083, 2251]),
+            "TR" : np.array([1365, 2251]),
+            "BR" : np.array([1365, 3150]),
+            "BL" : np.array([1083, 3151])
         },
         "4" : {
-            "TL" : np.array([1552, 2240]),
-            "TR" : np.array([1838, 2240]),
-            "BR" : np.array([1835, 3115]),
-            "BL" : np.array([1550, 3115])
+            "TL" : np.array([1544, 2252]),
+            "TR" : np.array([1826, 2252]),
+            "BR" : np.array([1826, 3151]),
+            "BL" : np.array([1544, 3151])
         },
         "5" : {
-            "TL" : np.array([2017, 2237]),
-            "TR" : np.array([2300, 2239]),
-            "BR" : np.array([2300, 3114]),
-            "BL" : np.array([2015, 3113])
+            "TL" : np.array([2005, 2250]),
+            "TR" : np.array([2286, 2250]),
+            "BR" : np.array([2286, 3149]),
+            "BL" : np.array([2005, 3149])
         },
     }
 
     COL_CORRECTIONS = {
-        1 : 0,
-        2 : -2
+        
     }
 
     ROW_CORRECTIONS = {
-        "1_1" : 1,
-        "1_3" : 3,
-        "1_4" : 5,
-        "1_5" : 5,
-        "1_6" : 3,
-        "1_7" : 2,
-        "2_1" : 1,
-        "2_3" : 3,
-        "2_4" : 5,
-        "2_5" : 5,
-        "2_6" : 3,
-        "2_7" : 2,
-        "3_1" : 1,
-        "3_3" : 3,
-        "3_4" : 5,
-        "3_5" : 5,
-        "3_6" : 3,
-        "3_7" : 2,
-        "4_1" : 1,
-        "4_3" : 3,
-        "4_4" : 5,
-        "4_5" : 5,
-        "4_6" : 3,
-        "4_7" : 2,
-        "5_1" : 1,
-        "5_3" : 3,
-        "5_4" : 5,
-        "5_5" : 5,
-        "5_6" : 3,
-        "5_7" : 2,
+       
     }
     
     coords = {}
@@ -282,10 +252,10 @@ def locate_questions_bubbles(img, debug=False):
 def locate_set_key_bubbles(img, debug=False):
          
     BLOCK_COORDS = {
-        "A" : np.array([1860, 2099]),
-        "B" : np.array([1952, 2099]),
-        "C" : np.array([2047, 2099]),
-        "D" : np.array([2150, 2099])
+        "A" : np.array([1849, 2110]),
+        "B" : np.array([1940, 2110]),
+        "C" : np.array([2035, 2110]),
+        "D" : np.array([2138, 2110])
     }
 
     coords = {}
@@ -334,6 +304,7 @@ def locate_set_key_bubbles(img, debug=False):
             cv2.imwrite("template_set_key_bubbles.jpg",img)
 
     return coords
+
  
 def generate_merged_debug_image(vis_img):
     BUBBLE_RADIUS = 20
@@ -388,6 +359,7 @@ def generate_merged_debug_image(vis_img):
     cv2.imwrite("template_marked_image.jpg", vis_img)
     
     return
+
 
 def generate_template(image_path, debug=False):
 

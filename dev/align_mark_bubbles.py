@@ -133,7 +133,7 @@ def generate_merged_debug_image(img):
 
 # Run detection on your sample file
 try:
-    image_path = "samples/6.jpg"
+    image_path = "samples/1.jpg"
     img = cv2.imread(image_path)
     if img is None:
         raise FileNotFoundError(f"Could not open or find the image for debugging: {image_path}")
