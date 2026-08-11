@@ -65,16 +65,72 @@ def locate_page_corner_markers(img, debug=False):
 
     return corner_coordinates
 
+def locate_set_key_bubbles(img, debug=False):
+         
+    BLOCK_COORDS = {
+        "A" : np.array([1865, 2112]),
+        "B" : np.array([1958, 2112]),
+        "C" : np.array([2055, 2112]),
+        "D" : np.array([2158, 2112])
+    }
+
+    coords = {}
+    for col, option in enumerate(["A","B","C","D"]):
+        p = BLOCK_COORDS[str(option)]
+        cx = int(round(p[0]))
+        cy = int(round(p[1]))
+
+        coords[str(option)] = {
+            "x": cx,
+            "y": cy
+        }
+
+    with open("template_set_key_bubbles.json", "w") as f:
+        json.dump(coords, f, indent=4)
+   
+
+    if debug:
+
+        with open("template_set_key_bubbles.json") as f:
+            coords = json.load(f)
+        
+        for opt, pt in coords.items():
+            cv2.circle(img,
+                (
+                    pt["x"],
+                    pt["y"]
+                ),
+                8,
+                (255,0,0),
+                -1
+            )
+
+            cv2.putText(img,
+                f"{opt}",
+                (
+                    pt["x"]-10,
+                    pt["y"]-10
+                ),
+                cv2.FONT_HERSHEY_SIMPLEX,
+                0.35,
+                (0,0,255),
+                1
+            )
+
+            cv2.imwrite("template_set_key_bubbles.jpg",img)
+
+    return coords
+
 def locate_student_id_bubbles(img, debug=False):
 
     COLS = 8
     ROWS = 10
 
-    TL = np.array([1598, 1450])
-    TR = np.array([2246, 1449])
+    TL = np.array([1613, 1459])
+    TR = np.array([2270, 1460])
 
-    BL = np.array([1599, 1995])
-    BR = np.array([2247, 1993])
+    BL = np.array([1612, 1996])
+    BR = np.array([2270, 1996])
 
     COL_CORRECTIONS = {
         0: 0,   
@@ -152,34 +208,34 @@ def locate_questions_bubbles(img, debug=False):
 
     BLOCK_CORNERS = {
         "1" : {
-            "TL" : np.array([171, 2254]),
-            "TR" : np.array([453, 2254]),
-            "BR" : np.array([453, 3153]),
-            "BL" : np.array([171, 3153])
+            "TL" : np.array([164, 2248]),
+            "TR" : np.array([450, 2248]),
+            "BR" : np.array([446, 3131]),
+            "BL" : np.array([161, 3130])
         },
         "2" : {
-            "TL" : np.array([627, 2262]),
-            "TR" : np.array([908, 2261]),
-            "BR" : np.array([908, 3160]),
-            "BL" : np.array([627, 3161])
+            "TL" : np.array([625, 2258]),
+            "TR" : np.array([912, 2259]),
+            "BR" : np.array([908, 3141]),
+            "BL" : np.array([623, 3140])
         },
         "3" : {
-            "TL" : np.array([1083, 2251]),
-            "TR" : np.array([1365, 2251]),
-            "BR" : np.array([1365, 3150]),
-            "BL" : np.array([1083, 3151])
+            "TL" : np.array([1088, 2251]),
+            "TR" : np.array([1374, 2251]),
+            "BR" : np.array([1370, 3133]),
+            "BL" : np.array([1085, 3133])
         },
         "4" : {
-            "TL" : np.array([1544, 2252]),
-            "TR" : np.array([1826, 2252]),
-            "BR" : np.array([1826, 3151]),
-            "BL" : np.array([1544, 3151])
+            "TL" : np.array([1556, 2253]),
+            "TR" : np.array([1842, 2253]),
+            "BR" : np.array([1838, 3136]),
+            "BL" : np.array([1552, 3136])
         },
         "5" : {
-            "TL" : np.array([2005, 2250]),
-            "TR" : np.array([2286, 2250]),
-            "BR" : np.array([2286, 3149]),
-            "BL" : np.array([2005, 3149])
+            "TL" : np.array([2022, 2253]),
+            "TR" : np.array([2307, 2254]),
+            "BR" : np.array([2304, 3137]),
+            "BL" : np.array([2018, 3136])
         },
     }
 
@@ -188,7 +244,36 @@ def locate_questions_bubbles(img, debug=False):
     }
 
     ROW_CORRECTIONS = {
-       
+        "1_3" : 3,
+        "1_4" : 6,
+        "1_5" : 5,
+        "1_6" : 3,
+        "1_7" : 2,
+        "1_8" : 2,
+        "2_3" : 3,
+        "2_4" : 6,
+        "2_5" : 5,
+        "2_6" : 3,
+        "2_7" : 2,
+        "2_8" : 2,
+        "3_3" : 3,
+        "3_4" : 6,
+        "3_5" : 5,
+        "3_6" : 3,
+        "3_7" : 2,
+        "3_8" : 2,
+        "4_3" : 3,
+        "4_4" : 6,
+        "4_5" : 5,
+        "4_6" : 3,
+        "4_7" : 2,
+        "4_8" : 2,
+        "5_3" : 3,
+        "5_4" : 6,
+        "5_5" : 5,
+        "5_6" : 3,
+        "5_7" : 2,
+        "5_8" : 2,
     }
     
     coords = {}
@@ -249,63 +334,7 @@ def locate_questions_bubbles(img, debug=False):
 
     return coords
 
-def locate_set_key_bubbles(img, debug=False):
-         
-    BLOCK_COORDS = {
-        "A" : np.array([1849, 2110]),
-        "B" : np.array([1940, 2110]),
-        "C" : np.array([2035, 2110]),
-        "D" : np.array([2138, 2110])
-    }
 
-    coords = {}
-    for col, option in enumerate(["A","B","C","D"]):
-        p = BLOCK_COORDS[str(option)]
-        cx = int(round(p[0]))
-        cy = int(round(p[1]))
-
-        coords[str(option)] = {
-            "x": cx,
-            "y": cy
-        }
-
-    with open("template_set_key_bubbles.json", "w") as f:
-        json.dump(coords, f, indent=4)
-   
-
-    if debug:
-
-        with open("template_set_key_bubbles.json") as f:
-            coords = json.load(f)
-        
-        for opt, pt in coords.items():
-            cv2.circle(img,
-                (
-                    pt["x"],
-                    pt["y"]
-                ),
-                8,
-                (255,0,0),
-                -1
-            )
-
-            cv2.putText(img,
-                f"{opt}",
-                (
-                    pt["x"]-10,
-                    pt["y"]-10
-                ),
-                cv2.FONT_HERSHEY_SIMPLEX,
-                0.35,
-                (0,0,255),
-                1
-            )
-
-            cv2.imwrite("template_set_key_bubbles.jpg",img)
-
-    return coords
-
- 
 def generate_merged_debug_image(vis_img):
     BUBBLE_RADIUS = 20
     page_corners = {}
