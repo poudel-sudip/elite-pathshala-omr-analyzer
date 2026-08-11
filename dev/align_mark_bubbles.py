@@ -85,7 +85,9 @@ def locate_page_corner_markers(img):
 
 def generate_merged_debug_image(img):
 
-    BUBBLE_RADIUS = 22
+    BUBBLE_RADIUS = 20
+    BUBBLE_RADIUS_X = 24
+    BUBBLE_RADIUS_Y = 18
 
     ## debug corner markers points
     page_corners = {}
@@ -105,6 +107,7 @@ def generate_merged_debug_image(img):
 
     for key, pt in set_bubbles.items():
         cv2.circle(img, (pt["x"], pt["y"]), BUBBLE_RADIUS, (255, 0, 0), -1)
+        # cv2.ellipse(img, (pt["x"], pt["y"]), (BUBBLE_RADIUS_X, BUBBLE_RADIUS_Y), 0, 0, 360, (255, 0, 0), -1)
         cv2.putText(img, f"{key.upper()}", (pt["x"] - 10, pt["y"] - 10), 
             cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 125, 255), 1)
 
