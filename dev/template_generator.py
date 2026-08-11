@@ -2,17 +2,8 @@ import cv2
 import numpy as np
 import json
 
-def locate_page_corner_markers(image_path, debug=False):
-
-    img = cv2.imread(image_path)
-    if img is None:
-        raise FileNotFoundError(f"Could not open or find the image: {image_path}")
-            
-    h, w, _ = img.shape
-
-    # print("\n Width:"+str(w))
-    # print("\n Height:"+str(h))
-
+def locate_page_corner_markers(img, debug=False):
+        
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     _, thresh = cv2.threshold(gray, 180, 255, cv2.THRESH_BINARY_INV)
     contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
@@ -74,7 +65,7 @@ def locate_page_corner_markers(image_path, debug=False):
 
     return corner_coordinates
 
-def locate_student_id_bubbles(image_path, debug=False):
+def locate_student_id_bubbles(img, debug=False):
 
     COLS = 8
     ROWS = 10
@@ -136,10 +127,7 @@ def locate_student_id_bubbles(image_path, debug=False):
         json.dump(coords, f, indent=4)
 
     if debug:
-        img = cv2.imread(image_path)
-        if img is None:
-            raise FileNotFoundError(f"Could not open or find the image: {image_path}")
-        
+
         with open("template_student_id_bubbles.json") as f:
             coords = json.load(f)
 
@@ -157,7 +145,7 @@ def locate_student_id_bubbles(image_path, debug=False):
 
     return coords
 
-def locate_questions_bubbles(image_path, debug=False):
+def locate_questions_bubbles(img, debug=False):
     BLOCKS = 5
     QUESTIONS_PER_BLOCK = 10
     OPTIONS = 4
@@ -259,10 +247,7 @@ def locate_questions_bubbles(image_path, debug=False):
         json.dump(coords, f, indent=4)
 
     if debug:
-        img = cv2.imread(image_path)
-        if img is None:
-            raise FileNotFoundError(f"Could not open or find the image: {image_path}")
-        
+
         with open("template_question_bubbles.json") as f:
             coords = json.load(f)
         
@@ -294,7 +279,7 @@ def locate_questions_bubbles(image_path, debug=False):
 
     return coords
 
-def locate_set_key_bubbles(image_path, debug=False):
+def locate_set_key_bubbles(img, debug=False):
          
     BLOCK_COORDS = {
         "A" : np.array([1860, 2099]),
@@ -319,10 +304,7 @@ def locate_set_key_bubbles(image_path, debug=False):
    
 
     if debug:
-        img = cv2.imread(image_path)
-        if img is None:
-            raise FileNotFoundError(f"Could not open or find the image: {image_path}")
-        
+
         with open("template_set_key_bubbles.json") as f:
             coords = json.load(f)
         
@@ -353,8 +335,8 @@ def locate_set_key_bubbles(image_path, debug=False):
 
     return coords
  
-
-def generate_merged_debug_image(image_path):
+def generate_merged_debug_image(vis_img):
+    BUBBLE_RADIUS = 20
     page_corners = {}
     student_id_bubbles = {}
     set_bubbles = {}
@@ -372,11 +354,7 @@ def generate_merged_debug_image(image_path):
     with open("template_question_bubbles.json") as f:
         questions_bubbles = json.load(f)
 
-
-    # 1. Read base image once
-    vis_img = cv2.imread(image_path)
-    if vis_img is None:
-        raise FileNotFoundError(f"Could not open or find the image for debugging: {image_path}")
+    
 
     # 2. Draw Page Corner Markers
     labels = ["TL", "TR", "BR", "BL"]
@@ -385,24 +363,24 @@ def generate_merged_debug_image(image_path):
     
     for idx, key in enumerate(sorted_keys):
         pt = (page_corners[key]["x"], page_corners[key]["y"])
-        cv2.circle(vis_img, pt, 18, colors[idx], -1)
+        cv2.circle(vis_img, pt, BUBBLE_RADIUS, colors[idx], -1)
         cv2.putText(vis_img, labels[idx], (pt[0] + 30, pt[1] + 10), 
                     cv2.FONT_HERSHEY_SIMPLEX, 1.2, colors[idx], 4)
 
     # 3. Draw Student ID Bubbles (Blue dots)
     for key, pt in student_id_bubbles.items():
-        cv2.circle(vis_img, (pt["x"], pt["y"]), 8, (255, 0, 0), -1)
+        cv2.circle(vis_img, (pt["x"], pt["y"]), BUBBLE_RADIUS, (255, 0, 0), -1)
 
     # 4. Draw Set Key Bubbles (Blue dots with red labels)
     for key, pt in set_bubbles.items():
-        cv2.circle(vis_img, (pt["x"], pt["y"]), 8, (255, 0, 0), -1)
+        cv2.circle(vis_img, (pt["x"], pt["y"]), BUBBLE_RADIUS, (255, 0, 0), -1)
         cv2.putText(vis_img, f"{key}", (pt["x"] - 10, pt["y"] - 10),
             cv2.FONT_HERSHEY_SIMPLEX, 0.35, (0, 0, 255), 1)
 
     # 5. Draw Question Bubbles (Blue dots with red labels)
     for q, options in questions_bubbles.items():
         for opt, pt in options.items():
-            cv2.circle(vis_img, (pt["x"], pt["y"]), 8, (255, 0, 0), -1)
+            cv2.circle(vis_img, (pt["x"], pt["y"]), BUBBLE_RADIUS, (255, 0, 0), -1)
             cv2.putText(vis_img, f"{q}{opt}", (pt["x"] - 10, pt["y"] - 10),
                 cv2.FONT_HERSHEY_SIMPLEX, 0.35, (0, 0, 255), 1)
 
@@ -411,16 +389,28 @@ def generate_merged_debug_image(image_path):
     
     return
 
+def generate_template(image_path, debug=False):
+
+    img = cv2.imread(image_path)
+    if img is None:
+        raise FileNotFoundError(f"Could not open or find the image: {image_path}")
+    
+    img = cv2.resize(img,(2409, 3437))
+    page_corners = locate_page_corner_markers(img, debug)
+    student_id_bubbles = locate_student_id_bubbles(img, debug)
+    set_key_bubbles = locate_set_key_bubbles(img, debug)
+    questions_bubbles = locate_questions_bubbles(img, debug)
+
+    merged_image = generate_merged_debug_image(img)
+
+
+
+    return None
 
 # Run detection on your template file
 try:
-    image_file = "samples/9.jpg"
-    page_corners = locate_page_corner_markers(image_file, False)
-    student_id_bubbles = locate_student_id_bubbles(image_file, False)
-    set_key_bubbles = locate_set_key_bubbles(image_file, False)
-    questions_bubbles = locate_questions_bubbles(image_file, False)
-
-    merged_image = generate_merged_debug_image(image_file)
+    image_file = "static/template.jpg"
+    generate_template(image_file)
 
 except Exception as e:
     print(f"Error processing image: {e}")

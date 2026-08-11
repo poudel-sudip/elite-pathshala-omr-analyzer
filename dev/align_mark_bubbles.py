@@ -5,8 +5,6 @@ import json
 
 def normalize_image(img):
 
-    img = cv2.resize(img,(2409, 3437))
-
     template_corners = {}
     page_corners = locate_page_corner_markers(img)
 
@@ -34,8 +32,7 @@ def normalize_image(img):
     )
 
     H = cv2.getPerspectiveTransform(src, dst)
-    h, w = img.shape[:2]
-    aligned_img = cv2.warpPerspective(img, H, (w, h))
+    aligned_img = cv2.warpPerspective(img, H, (2409, 3437))
 
     return aligned_img
 
