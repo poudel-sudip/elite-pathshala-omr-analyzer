@@ -390,7 +390,7 @@ def update_omr_sheet(img,user_answers,correct_answers = {}, user_set = None, cor
             if (user_answer == "" or user_answer is None or correct_answer is None):
                 continue
 
-            is_correct = (user_answer == correct_answer)
+            is_correct = (user_answer.casefold() == correct_answer.casefold())
             for option, point in options.items():
 
                 # if option != user_answer:

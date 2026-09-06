@@ -120,8 +120,9 @@ class OMRAnalyzer:
                     continue
 
                 attempted += 1
+                correct_answer = correct_answers.get(question_no)
 
-                if (answer == correct_answers.get(question_no)):
+                if (answer and correct_answer and answer.casefold() == correct_answer.casefold()):
                     correct += 1
                 else:
                     incorrect += 1
